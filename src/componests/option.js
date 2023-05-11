@@ -1,34 +1,26 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const NewUser = () => {
   const [res, setResp] = useState([]);
 
-
-const fetchData = ()=>{
-  fetch("https://static.healthforcego.com/grades.json")
-  .then((data) => {
-    return data.json();
-  })
-  //  console.log(item)
-  .then((item) => {
-    item.grades.map((dato) => {
-      setResp((res) => [...res, dato]);
-    });
-  })
-}
-useEffect(() => {
-    fetchData()
-    
-  return setResp([])
+  useEffect(() => {
+    fetchData();
+    return setResp([]);
   }, []);
-  
-  console.log(res);
+
+  const fetchData = async () => {
+    const data = await fetch("https://static.healthforcego.com/grades.json");
+    const dataJson = await data.json();
+    setResp(dataJson.grades.map((dato) => dato));
+  };
+  // console.log("res ", res);
   return (
-    res.map((item) => {
-    return <option key={item}>{item.split(" ")[0]}</option>;
-  })
-  )
+    <select style={{maxWidth:"350px",width:"90vw",backgroundColor:"white", marginBottom:"10px"}}>
+      {res.map((item) => {
+        return <option key={item}>{item.split(" ")[0]}</option>;
+      })}
+    </select>
+  );
 };
 
 export default NewUser;
